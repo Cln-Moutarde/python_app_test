@@ -10,8 +10,8 @@ window = Tk()
 #debut de la personnalisation de la fenetre
 window.title("Ultimate QR Code RRRRReader")
 window.geometry("500x500")
-window.minsize(400, 360)
-window.maxsize(600, 600)
+window.minsize(500, 500)
+window.maxsize(1920, 1080)
 window.iconbitmap("laptop.ico")
 window.config(background='#ACC7CD')
 
