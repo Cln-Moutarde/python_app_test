@@ -1,5 +1,10 @@
+from argparse import FileType
 from ast import main
 from ctypes import resize, sizeof
+import tkinter
+from tkinter import filedialog
+from tkinter.messagebox import showinfo
+from turtle import fd
 from typing_extensions import Self
 from webbrowser import get
 import qrcode
@@ -11,9 +16,9 @@ window = Tk()
 
 #debut de la personnalisation de la fenetre
 window.title("Ultimate QR Code RRRRReader")
-window.geometry("500x500")
-window.minsize(400, 400)
-window.maxsize(1920, 1080)
+window.geometry("480x320")
+window.minsize(400, 300)
+window.maxsize(600, 650)
 window.iconbitmap("laptop.ico")
 window.config(background='#ACC7CD')
 window.rowconfigure(0, weight=1)
@@ -23,17 +28,41 @@ window.columnconfigure(0, weight=1)
 def show_frame(frame):
     frame.tkraise()
 
+def valider():
+    text = entry_text.get()
+    qr = qrcode.QRCode()
+    qr.add_data(text)
+    qr.make(fit=TRUE)
+    img = qr.make_image()
+    img.save("qrcode.png")
+
+
+def fichier():
+    FileType = ('iamge file', '*.png'), ('All files', '*.*')
+    filename = filedialog.askopenfilename(title='Ouvrir un fichier',initialdir="/", filetypes=(FileType))
+    img1 = Image.open(filename)
+    result = pyzbar.decode(img1)
+    print(result)
+    
+
 
 #frame
 frameMENU = Frame(window, bg='#ACC7CD')
 frameMENU.grid_rowconfigure(0, weight=1)
-frameMENU.grid_columnconfigure(0, weight=1)
+frameMENU.grid_rowconfigure(1, weight=0)
+frameMENU.grid_rowconfigure(2, weight=0)
+frameMENU.grid_rowconfigure(3, weight=0)
+frameMENU.grid_columnconfigure(0, weight=1, uniform="group1")  
 frame2 = Frame(frameMENU, bg='#ACC7CD')
 frame3 = Frame(frameMENU, bg='#ACC7CD')
 
 frameCREER = Frame(window, bg='#ACC7CD')
+frameCREER = Frame(window, bg='#ACC7CD')
 frameCREER.grid_rowconfigure(0, weight=1)
-frameCREER.grid_columnconfigure(0, weight=1)
+frameCREER.grid_rowconfigure(1, weight=0)
+frameCREER.grid_rowconfigure(2, weight=0)
+frameCREER.grid_rowconfigure(3, weight=0)
+frameCREER.grid_columnconfigure(0, weight=1, uniform="group1")
 frame4 = Frame(frameCREER, bg='#ACC7CD')
 frame5 = Frame(frameCREER, bg='#ACC7CD')
 
@@ -50,7 +79,7 @@ for frame in (frameMENU, frameCREER, frameLIRE, frame2, frame3, frame4, frame5, 
 
 #texte 1 (titre)
 label_title = Label(frame2, text="Bienvenue sur Ultimate QR Code Reader", font=("Arial", 18), bg='#ACC7CD', fg='white')
-label_title.grid(row=0, column=1, padx=5,) 
+label_title.grid(row=0, column=1, padx=5, pady=5)
 
 #texte 2 (sous-titre)
 label_subtitle = Label(frame2, text="Que voulez vous faire ?", font=("Arial", 13), bg='#ACC7CD', fg='white')
@@ -76,24 +105,31 @@ label_titlebutton2 = Label(frame3, text="Lire un QR Code", font=("Arial", 13), b
 label_titlebutton2.grid(row=3, column=2, pady=10)
 
 
+
+
 #===========================CREER===========================
 
 #Titre 
 label_titleCREER = Label(frame4, text="Creer un QR Code", font=("Arial", 18), bg='#ACC7CD', fg='white')
-label_titleCREER.grid(row=0, column=1, padx=5,)
+label_titleCREER.pack(pady=10)
 
 #Sous titre
 label_subtitleCREER = Label(frame4, text="Tapez le texte désiré puis validez", font=("Arial", 13), bg='#ACC7CD', fg='white')
-label_subtitleCREER.grid(row=1, column=1, padx=5, pady=5)
+label_subtitleCREER.pack( padx=5, pady=5)
+
+#Champ de saisie
+entry_text = Entry(frame4, width=30, borderwidth=0, font=("Arial", 13))
+entry_text.pack(padx=10, pady=30, side=BOTTOM)
 
 
-
-
+#Bouton valider 
+dwnd3 = Button(frame5, text="Valider", font=("Arial", 17), borderwidth=0, command= valider)
+dwnd3.pack(padx=10, pady=10)
 
 
 #bouton retour menu
 button3 = Button(frame5, text="retour au menu", borderwidth=0, command=lambda:show_frame(frameMENU))
-button3.grid(row=2, column= 2, pady=10)
+button3.pack(side=BOTTOM, padx=10, pady=10)
 
 
 
@@ -103,16 +139,20 @@ button3.grid(row=2, column= 2, pady=10)
 
 #Titre
 label_titleLIRE = Label(frame6, text="Lire un QR Code", font=("Arial", 18), bg='#ACC7CD', fg='white')
-label_titleLIRE.grid(row=0, column=1, padx=5,)
+label_titleLIRE.pack(pady=10)
 
 #Sous titre
 label_subtitleLIRE = Label(frame6, text="Selectionnez un fichier puis validez", font=("Arial", 13), bg='#ACC7CD', fg='white')
-label_subtitleLIRE.grid(row=1, column=1, padx=5, pady=5)
+label_subtitleLIRE.pack( padx=5, side=BOTTOM)
 
+
+#Bouton choisir fichier
+dwnd4 = Button(frame7, text="Choisir un fichier", font=("Arial", 17), borderwidth=0, command= fichier)
+dwnd4.pack(padx=10, pady=70)
 
 #bouton retour menu
 button4 = Button(frame7, text="retour au menu", borderwidth=0, command=lambda:show_frame(frameMENU))
-button4.grid(row=2, column= 2, pady=10)
+button4.pack(side=BOTTOM, padx=10, pady=10)
 
 
 
