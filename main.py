@@ -3,13 +3,23 @@ from ast import main
 from ctypes import resize, sizeof
 import tkinter
 from tkinter import filedialog
-from tkinter.messagebox import showinfo
+from tkinter.messagebox import askquestion, showinfo
 from turtle import fd
 from typing_extensions import Self
 from webbrowser import get
 import qrcode
-import pyzbar
+from pyzbar import *
+from pyzbar.pyzbar import decode
+import PIL.Image
+from io import BytesIO
 from tkinter import *
+import re
+import webbrowser
+
+#configuration de webbrowser
+chrome_path = 'C:/Program Files/Google/Chrome/Application/chrome.exe %s'
+
+
 
 #creation de la fenetre
 window = Tk()
@@ -38,12 +48,27 @@ def valider():
 
 
 def fichier():
-    FileType = ('iamge file', '*.png'), ('All files', '*.*')
-    filename = filedialog.askopenfilename(title='Ouvrir un fichier',initialdir="/", filetypes=(FileType))
-    img1 = Image.open(filename)
-    result = pyzbar.decode(img1)
-    print(result)
+    FileType = ('Image file', '*.png'), ('All files', '*.*')
+    filename = filedialog.askopenfilename(title='Ouvrir un fichier',initialdir="/", filetypes=FileType)
+    img1 = PIL.Image.open((filename))
+    img2 = decode(img1)
+    result = re.search("""data=b'(.+?)', type=""", str(img2)).group(1)
+    MsgBox = askquestion("QR Code", ("voici le resultat:", result, "Voulez-vous copier le resultat dans le presse-papier?"))
+    if MsgBox == "yes":
+        window.clipboard_clear()
+        window.clipboard_append(result)
+        showinfo("QR Code", "Le resultat a ete copie dans le presse-papier")
+    else: MsgBox2 = askquestion("QR Code", "Voulez-vous ouvrir le resultat dans un navigateur?")
     
+    if MsgBox2 == "yes":
+            webbrowser.get(chrome_path).open(result)
+            showinfo("QR Code", "Le resultat a ete ouvert dans un navigateur")
+    else: showinfo("QR Code", "A bientot")
+
+    if MsgBox2 == "no":
+            webbrowser.get(chrome_path).open(result)
+            showinfo("QR Code", "Le resultat a ete ouvert dans un navigateur")
+    else: showinfo("QR Code", "A bientot")
 
 
 #frame
