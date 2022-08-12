@@ -45,6 +45,7 @@ def valider():
     qr.make(fit=TRUE)
     img = qr.make_image()
     img.save("qrcode.png")
+    showinfo("QR Code", "Le QR Code a ete cree dans le dossier racine")
 
 
 def fichier():
@@ -58,17 +59,15 @@ def fichier():
         window.clipboard_clear()
         window.clipboard_append(result)
         showinfo("QR Code", "Le resultat a ete copie dans le presse-papier")
-    else: MsgBox2 = askquestion("QR Code", "Voulez-vous ouvrir le resultat dans un navigateur?")
+    
+    MsgBox2 = askquestion("QR Code", "Voulez-vous ouvrir le resultat dans un navigateur?")
     
     if MsgBox2 == "yes":
             webbrowser.get(chrome_path).open(result)
             showinfo("QR Code", "Le resultat a ete ouvert dans un navigateur")
     else: showinfo("QR Code", "A bientot")
 
-    if MsgBox2 == "no":
-            webbrowser.get(chrome_path).open(result)
-            showinfo("QR Code", "Le resultat a ete ouvert dans un navigateur")
-    else: showinfo("QR Code", "A bientot")
+    
 
 
 #frame
